@@ -1,5 +1,5 @@
 import './style.css';
-import createTodo from './todoLogic';
+import { createTodo, deleteTodo, updateTodo, todoItemToggleFinished } from './todoLogic';
 
 let newTodoData = {
     title: "Go Home",
