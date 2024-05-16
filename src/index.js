@@ -1,5 +1,7 @@
 import './style.css';
-import { createTodo, deleteTodo, updateTodo, todoItemToggleFinished } from './todoLogic';
+import { TodoLogic } from './todoLogic';
+
+const todoLogic = new TodoLogic;
 
 let newTodoData = {
     title: "Go Home",
@@ -9,4 +11,4 @@ let newTodoData = {
     project: ""
 };
 
-console.log(createTodo(newTodoData));
+console.log(todoLogic.createTodo(newTodoData));

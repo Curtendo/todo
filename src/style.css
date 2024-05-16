@@ -5,6 +5,7 @@
     --header-color-focus:rgb(106, 150, 144);
     --header-color-shadow:rgba(88, 126, 121, 0.705);
     --sidebar-color:rgb(227, 247, 242);
+    --main-shadow:rgb(177, 177, 177);
 }
 
 * {
@@ -26,7 +27,8 @@ body {
     width: 100vw;
 }
 
-/* header */
+
+    /* header */
 
 .header {
     grid-column: 1 / -1;
@@ -37,7 +39,8 @@ body {
 
 }
 
-/* sidebar */
+
+    /* sidebar */
 
 .sidebar {
     grid-column: 1 / 2;
@@ -88,25 +91,51 @@ body {
     box-shadow: inset 2px 2px 3px var(--header-color-shadow);
 }
 
-/* main */
+
+    /* main */
 
 .main-container {
     grid-column: 2 / 3;
     grid-row: 2 / 3;
-    padding: 20px;
-    overflow: auto;
+    padding: 20px 0;
+    overflow: hidden;
+    box-shadow: inset 1px 1px 3px var(--main-shadow);
 }
 
 .todo-item {
     border-left: 3px solid var(--header-color);
     padding: 8px;
-    margin: 10px 0;
+    margin: 10px 20px;
     background-color: var(--sidebar-color);
     display: flex;
     justify-content: space-between;
     align-items: center;
     max-width: 100%;
     overflow: hidden;
+    position: relative;
+}
+
+.todo-item.todo-item-selected {
+    box-shadow: 2px 2px 3px var(--main-shadow);
+}
+
+.todo-item.todo-item-selected::after {
+    content: "\25B6"; 
+    font-size: 1.2em;
+    color: var(--header-color);
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.todo-item:not(.todo-item-selected) {
+    cursor: pointer;
+}
+
+.todo-item:not(.todo-item-selected):hover {
+    transform: translateY(0) translateX(3px);
+    transition: 0.3s;
 }
 
 .todo-item>input[type=checkbox] {
@@ -128,7 +157,6 @@ body {
 
 .priority {
     font-size: .9rem;
-    /* padding: 0 10px; */
     /* outline: var(--header-color) solid 1px; */
     border-radius: 4px;
     width: 4.8rem;
@@ -152,6 +180,7 @@ body {
     border: none;
     padding: 0 5px;
     margin-left: 5px;
+    margin-right: 25px;
     cursor: pointer;
     outline: none;
 }
@@ -168,10 +197,13 @@ body {
     fill: var(--header-color-focus);
 }
 
-/* detail container */
+
+
+    /* detail container */
 
 .detail-container {
     grid-column: 3 / 4;
     grid-row: 2 / 3;
     border-left: 1px solid black;
+    box-shadow: inset 0px 1px 3px var(--main-shadow);
 }
