@@ -1,14 +1,10 @@
 import './style.css';
 import { TodoLogic } from './todoLogic';
+import { TodoController } from './todoController.js';
+import { TodoView } from './todoView.js';
 
-const todoLogic = new TodoLogic;
+const logic = new TodoLogic;
+const view = new TodoView;
+const controller = new TodoController(logic, view);
 
-let newTodoData = {
-    title: "Go Home",
-    description: "Don't forget to go home!",
-    dueDate: "Sept 20, 2024",
-    priority: "high",
-    project: ""
-};
-
-console.log(todoLogic.createTodo(newTodoData));
+controller.init();
