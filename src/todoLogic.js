@@ -1,7 +1,5 @@
 import { generateUniqueId } from "./utility";
 
-const myTodos = []
-
 class TodoItem {
     constructor({title, description, dueDate, priority, project}) {
         this.title = title;

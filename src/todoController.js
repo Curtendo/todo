@@ -1,5 +1,8 @@
 class TodoController {
-    constructor(todoLogic, todoView) {
-        
+    constructor(logic, view) {
+        this.logic = logic;
+        this.view = view;
     }
+
+    
 }
