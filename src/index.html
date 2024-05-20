@@ -15,25 +15,22 @@
                 <h3 class="nav-item-header">Todo
                     <span class="navbar-plus">+</span>
                 </h3>
-                <ul class="navbar-list">
-                    <li class="nav-item nav-item-selected">All</li>
-                    <li class="nav-item">Today</li>
-                    <li class="nav-item">Week</li>
+                <ul class="navbar-list" id="navbar-list-time-filters">
+                    <li class="nav-item nav-item-selected" data-navbar="all">All</li>
+                    <li class="nav-item" data-navbar="today">Today</li>
+                    <li class="nav-item" data-navbar="week">Week</li>
                 </ul>
                 <h3 class="nav-item-header">Projects
                     <span class="navbar-plus">+</span>
                 </h3>
-                <ul class="navbar-list" id="project-list">
-                    <li class="nav-item">Gym</li>
-                    <li class="nav-item">Study</li>
-                    <li class="nav-item">Work</li>
-                </ul>
+                <ul class="navbar-list" id="navbar-list-projects"></ul>
             </div>
         </nav>
         <div class="main-container">
             <ul class="todo-item-list">
                 <li class="todo-item todo-item-selected">
                     <input type="checkbox" name="finished" id="finished">
+                    <span class="item-date">8/12</span>
                     <span class="item-title">Todo 1 asdf msalfjl w sdasdfasdfasdfsfnw sfk salkasdfkjhasdfklasffj wle skfj w jsldkf</span>
                     <span class="priority priority-high">HIGH</span>
                     <button type="button" class="delete-button" aria-label="Delete">

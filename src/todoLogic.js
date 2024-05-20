@@ -16,9 +16,14 @@ class TodoItem {
     }
 }
 
-export class TodoLogic {
+export default class TodoLogic {
     constructor() {
         this.myTodos = [];
+    }
+
+    // Return todo list
+    getTodos() {
+        return this.myTodos;
     }
 
     // create todo item
@@ -50,11 +55,6 @@ export class TodoLogic {
         if (index !== -1) {
             this.myTodos[index].toggleFinished();
         }
-    }
-
-    // Return todo list
-    getTodos() {
-        return this.myTodos;
     }
 }
 
