@@ -3,6 +3,9 @@ export default class TodoController {
         this.todoLogic = todoLogic;
         this.projectLogic = projectLogic;
         this.view = view;
+
+        // Pass controller instance to view instance
+        this.view.controller = this;
     }
 
     init() {
@@ -11,7 +14,7 @@ export default class TodoController {
             description: 'Description for Todo 1',
             dueDate: '2024-05-20',
             priority: 'HIGH',
-            project: 'Project 1'
+            project: 'Gym'
         });
 
         this.todoLogic.createTodo({
@@ -19,7 +22,7 @@ export default class TodoController {
             description: 'Description for Todo 2',
             dueDate: '2024-05-21',
             priority: 'MEDIUM',
-            project: 'Project 2'
+            project: 'Gym'
         });
 
         this.todoLogic.createTodo({
@@ -27,7 +30,7 @@ export default class TodoController {
             description: 'Description for Todo 3',
             dueDate: '2024-05-22',
             priority: 'LOW',
-            project: 'Project 3'
+            project: 'Work'
         });
 
         // Default selection to "All"
@@ -50,5 +53,20 @@ export default class TodoController {
     controlProjectDisplay() {
         const myProjects = this.projectLogic.getProjects();
         this.view.displayProjects(myProjects);
+    }
+
+    getFilteredProjects(projectTitle) {
+        const myTodos = this.todoLogic.getTodos();
+        const filteredTodos = myTodos.filter(todo => todo.project === projectTitle);
+        this.view.displayTodoItems(filteredTodos);
+    }
+
+    controlGetProjects() {
+        return this.projectLogic.getProjects();
+    }
+
+    controlCreateTodo(todoData) {
+        this.todoLogic.createTodo(todoData);
+        this.controlTodosDisplay();
     }
 }

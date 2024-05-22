@@ -13,15 +13,15 @@
         <nav class="sidebar">
             <div class="navbar">
                 <h3 class="nav-item-header">Todo
-                    <span class="navbar-plus">+</span>
+                    <span class="navbar-plus" id="add-todo-button">+</span>
                 </h3>
                 <ul class="navbar-list" id="navbar-list-time-filters">
-                    <li class="nav-item nav-item-selected" data-navbar="all">All</li>
-                    <li class="nav-item" data-navbar="today">Today</li>
-                    <li class="nav-item" data-navbar="week">Week</li>
+                    <li class="nav-item nav-item-selected" id="nav-item-all">All</li>
+                    <li class="nav-item" id="nav-item-today">Today</li>
+                    <li class="nav-item" id="nav-item-week">Week</li>
                 </ul>
                 <h3 class="nav-item-header">Projects
-                    <span class="navbar-plus">+</span>
+                    <span class="navbar-plus" id="add-project-button">+</span>
                 </h3>
                 <ul class="navbar-list" id="navbar-list-projects"></ul>
             </div>
@@ -47,10 +47,10 @@
             </ul>
         </div>
         <div class="detail-container">
-            <div class="detail-form-to-hide">
+            <div class="detail-form-to-hide" id="new-todo-form-to-hide" hidden>
                 <h2 class="detail-title">Create new todo</h2>
                 <div class="detail-form-container">
-                    <form action="" class="detail-form">
+                    <form action="" class="detail-form" id="todo-form">
                         <input type="text" name="form-title" id="form-title" placeholder="Title" required>
                         <textarea name="form-description" id="form-description" rows="4" placeholder="Description"></textarea>
                         <div class="select-div">
@@ -58,11 +58,11 @@
                             <label for="input-date">Due Date</label>
                         </div>
                         <div class="select-div">
-                            <select name="form-priority" id="form-priority">
-                                <option value="none">None</option>
-                                <option value="low">Low</option>
-                                <option value="medium">Medium</option>
-                                <option value="high">High</option>
+                            <select name="form-priority" id="form-priority"> 
+                                <option value="NONE">None</option>
+                                <option value="LOW">Low</option>
+                                <option value="MEDIUM">Medium</option>
+                                <option value="HIGH">High</option>
                             </select>
                             <label for="form-priority">Priority</label>
                         </div>
@@ -72,7 +72,16 @@
                             </select>
                             <label for="form-project">Project</label>
                         </div>
-                        <button type="submit" id="confirm-button">Confirm</button>
+                        <button type="submit" id="todo-confirm-button">Confirm</button>
+                    </form>
+                </div>
+            </div>
+            <div class="detail-form-to-hide" id="project-form-to-hide-id" hidden>
+                <h2 class="detail-title">Create new project</h2>
+                <div class="detail-form-container">
+                    <form action="" class="detail-form" id="project-form">
+                        <textarea name="project-title" id="project-title" rows="2" placeholder="Project Title" required></textarea>
+                        <button type="submit" id="project-confirm-button">Confirm</button>
                     </form>
                 </div>
             </div>

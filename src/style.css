@@ -23,7 +23,7 @@ body {
 
 .content {
     display: grid;
-    grid-template-columns: 2fr 7fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-template-rows: 1fr 10fr;
     height: 100vh;
     width: 100vw;
@@ -51,7 +51,7 @@ body {
 }
 
 .navbar {
-    padding: 12px 40px 15px 20px;
+    padding: 12px 30px 15px 20px;
 }
 
 .navbar-list {
@@ -97,6 +97,7 @@ body {
     border: 0px solid black;
     border-radius: 50%;
     padding: 0 .55rem;
+    margin-left: 15px;
     background-color: var(--header-color);
     cursor: pointer;
     box-shadow: 2px 2px 3px var(--header-color-shadow);
@@ -111,12 +112,13 @@ body {
     /* main */
 
 .main-container {
-    grid-column: 2 / 3;
+    grid-column: 2 / 8;
     grid-row: 2 / 3;
     padding: 20px 0;
     overflow: hidden;
     box-shadow: inset 1px 1px 3px var(--main-shadow);
     min-width: 447px;
+    position: relative;
 }
 
 .todo-item-list {
@@ -234,12 +236,10 @@ body {
     /* detail container */
 
 .detail-container {
-    grid-column: 3 / 4;
+    grid-column: 8 / -1;
     grid-row: 2 / 3;
-    border-left: 1px solid black;
     box-shadow: inset 0px 1px 3px var(--main-shadow);
     padding: 0 20px;
-    
 }
 
 .detail-container h2 {
@@ -251,6 +251,7 @@ body {
     width: fit-content;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
+    border-left: 3px solid var(--header-color-focus);
     box-shadow: 2px 2px 3px var(--main-shadow);
 }
 
@@ -258,6 +259,7 @@ body {
     background-color: var(--sidebar-color);
     padding-top: 20px;
     padding-bottom: 20px;
+    border-left: 3px solid var(--header-color-focus);
     box-shadow: 2px 2px 3px var(--main-shadow);
 }
 
@@ -303,6 +305,7 @@ body {
     width: fit-content;
     padding: 5px 15px;
     margin-top: 10px;
+    margin-left: 2px;
     border-radius: 5px;
     border: none;
     outline: var(--main-shadow) solid 1px;

@@ -1,11 +1,20 @@
 export default class TodoView {
     constructor() {
+        this.mainContainer = document.querySelector(".main-container");
+        this.detailContainer = document.querySelector(".detail-container");
+        
         this.todoList = document.querySelector(".todo-item-list");
+
         this.navbarListTimeFilters = document.querySelector("#navbar-list-time-filters");
         this.navbarListProjects = document.querySelector("#navbar-list-projects");
 
-        this.detailFormToHide = document.querySelector(".detail-form-to-hide");
-        this.confirmButton = document.querySelector(".confirm-button");
+        this.addTodoButton = document.querySelector("#add-todo-button");
+        this.addProjectButton = document.querySelector("#add-project-button");
+
+        this.detailFormToHide = document.querySelector("#new-todo-form-to-hide");
+        this.projectFormToHide = document.querySelector("#project-form-to-hide-id");
+        this.todoConfirmButton = document.querySelector("#todo-confirm-button");
+        this.projectConfirmButton = document.querySelector("#project-confirm-button");
 
         this.initEventListeners();
     }
@@ -14,6 +23,7 @@ export default class TodoView {
         this.navbarListTimeFilters.addEventListener("click", (e) => {
             if (e.target.classList.contains("nav-item")) {
                 this.handleTimeFilterClick(e.target);
+                console.log(e.target);
             }
         })
 
@@ -22,14 +32,106 @@ export default class TodoView {
                 this.handleProjectClickFilter(e.target);
             }
         })
+
+        this.addTodoButton.addEventListener("click", (e) => {
+            this.handleAddTodoButton();
+        })
+
+        this.addProjectButton.addEventListener("click", (e) => {
+            this.handleAddProjectButton();
+        })
+
+        this.todoConfirmButton.addEventListener("click", (e) => {
+            this.handleSubmitTodo();
+        })
+
+        this.projectConfirmButton.addEventListener("click", (e) => {
+            this.handleSubmitProject();
+        })
+
+        this.
     }
 
     handleTimeFilterClick(target) {
-        console.log(target);
+        this.clearNavItemSelector();
+        this.showNavItemSelector(target);
+
+        // Filter by time code
     }
 
     handleProjectClickFilter(target) {
-        console.log(target);
+        this.clearNavItemSelector();
+        this.showNavItemSelector(target);
+
+        // Filter by project code
+        const projectTitle = target.textContent;
+        this.controller.getFilteredProjects(projectTitle);
+    }
+
+    handleAddTodoButton() {
+        const formTodoProjectDropdown = document.querySelector("#form-project");
+        
+        this.hideFormDivs();
+
+        // Display available projects in dropdown
+        const myProjects = this.controller.controlGetProjects();
+        myProjects.forEach((project) => {
+            const selectOption = document.createElement("option");
+            selectOption.setAttribute("value", project);
+            selectOption.textContent = project;
+            formTodoProjectDropdown.appendChild(selectOption);
+        })
+
+        this.detailFormToHide.hidden = false;
+    }
+
+    handleAddProjectButton() {
+        this.hideFormDivs();
+        this.projectFormToHide.hidden = false;
+    }
+
+    handleSubmitTodo() {
+        const todoForm = document.querySelector("#todo-form")
+        const formTodoTitle = document.querySelector("#form-title");
+        const formTodoDescription = document.querySelector("#form-description");
+        const formTodoDate = document.querySelector("#input-date");
+        const formTodoPriority = document.querySelector("#form-priority");
+        const formTodoProject = document.querySelector("#form-project");
+        
+        const availableProjects = this.controller.controlGetProjects();
+        this.hideFormDivs(); 
+
+        const todoData = {
+            title: formTodoTitle.value,
+            description: formTodoDescription.value,
+            dueDate: formTodoDate.value,
+            priority: formTodoPriority.value,
+            project: formTodoProject.value
+        }
+
+        this.controller.controlCreateTodo(todoData);
+
+        todoForm.reset();
+    }
+
+    handleSubmitProject() {
+        this.hideFormDivs();
+    }
+
+    clearNavItemSelector() {
+        const navbarItems = document.querySelectorAll(".nav-item");
+        navbarItems.forEach((item) => {
+            item.classList.remove("nav-item-selected");
+        })
+    }
+
+    showNavItemSelector(target) {
+        target.classList.add("nav-item-selected");
+    }
+
+    hideFormDivs() {
+        this.detailFormToHide.hidden = true;
+        this.projectFormToHide.hidden = true;
     }
 
     displayTodoItems(myTodos) {
