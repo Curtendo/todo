@@ -35,25 +35,37 @@ export default class TodoLogic {
 
     // Delete todo
     deleteTodo(gotId) {
-        const index = this.myTodos.indexOf(todo => todo.id === gotId);
+        const index = this.myTodos.findIndex(todo => todo.id === gotId);
         if (index !== -1) {
             this.myTodos.splice(index, 1);
         }
     }
 
+    // Get todo data by ID
+    getTodoById(gotId) {
+        const todo = this.myTodos.find(todo => todo.id === gotId);
+        if (todo)  {
+            return todo;
+        }
+    }
+
     // Edit todo
     updateTodo(gotId, todoData) {
-        const index = this.myTodos.indexOf(todo => todo.id === gotId);
-        if (index !== -1) {
-            this.myTodos[index] = todoData;
+        const todo = this.myTodos.find(todo => todo.id === gotId);
+        if (todo) {
+            todo.title = todoData.title;
+            todo.description = todoData.description;
+            todo.dueDate = todoData.dueDate;
+            todo.priority = todoData.priority;
+            todo.project = todoData.project;
         }
     }
 
     // Toggle Finished
     todoItemToggleFinished(gotId) {
-        const index = this.myTodos.indexOf(todo => todo.id === gotId);
-        if (index !== -1) {
-            this.myTodos[index].toggleFinished();
+        const todo = this.myTodos.find(todo => todo.id === gotId);
+        if (todo) {
+            todo.toggleFinished();
         }
     }
 }

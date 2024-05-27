@@ -1,3 +1,6 @@
+import { makeFutureDate, makeNewDate } from "./utility";
+import { addDays } from "date-fns";
+
 export default class TodoController {
     constructor(todoLogic, projectLogic, view) {
         this.todoLogic = todoLogic;
@@ -10,43 +13,80 @@ export default class TodoController {
 
     init() {
         this.todoLogic.createTodo({
-            title: 'Todo 1',
-            description: 'Description for Todo 1',
-            dueDate: '2024-05-20',
+            title: 'Morning Workout',
+            description: 'Complete a 30-minute cardio session.',
+            dueDate: makeNewDate(),
             priority: 'HIGH',
-            project: 'Gym'
+            project: 'Gym',
         });
-
+    
         this.todoLogic.createTodo({
-            title: 'Todo 2',
-            description: 'Description for Todo 2',
-            dueDate: '2024-05-21',
+            title: 'Team Meeting',
+            description: 'Attend the weekly team meeting.',
+            dueDate: makeFutureDate(1),
             priority: 'MEDIUM',
-            project: 'Gym'
+            project: 'Work',
         });
-
+    
         this.todoLogic.createTodo({
-            title: 'Todo 3',
-            description: 'Description for Todo 3',
-            dueDate: '2024-05-22',
-            priority: 'LOW',
-            project: 'Work'
+            title: 'Project Proposal',
+            description: 'Draft and submit the project proposal document.',
+            dueDate: makeFutureDate(9),
+            priority: 'HIGH',
+            project: 'Work',
         });
-
-        // Default selection to "All"
+    
+        this.todoLogic.createTodo({
+            title: 'Grocery Shopping',
+            description: 'Buy groceries for the week.',
+            dueDate: makeFutureDate(3),
+            priority: 'LOW',
+            project: 'None',
+        });
+    
+        this.todoLogic.createTodo({
+            title: 'Math Homework',
+            description: 'Complete the math homework assignment.',
+            dueDate: makeFutureDate(20),
+            priority: 'HIGH',
+            project: 'School',
+        });
+    
+        this.todoLogic.createTodo({
+            title: 'Yoga Class',
+            description: 'Attend the evening yoga class.',
+            dueDate: makeFutureDate(5),
+            priority: 'MEDIUM',
+            project: 'Gym',
+        });
+    
+        this.todoLogic.createTodo({
+            title: 'Client Presentation',
+            description: 'Prepare slides and present to the client.',
+            dueDate: makeFutureDate(13),
+            priority: 'HIGH',
+            project: 'Work',
+        });
+    
+        this.todoLogic.createTodo({
+            title: 'History Essay',
+            description: 'Write and submit the history essay.',
+            dueDate: makeFutureDate(7),
+            priority: 'MEDIUM',
+            project: 'School',
+        });
 
         // Display todo list
         this.controlTodosDisplay();
 
         // Display available projects
         this.controlProjectDisplay();
-
-        // Hide details?
         
     }
 
     controlTodosDisplay() {
         const myTodos = this.todoLogic.getTodos();
+        console.log(myTodos);
         this.view.displayTodoItems(myTodos);
     }
 
@@ -67,6 +107,30 @@ export default class TodoController {
 
     controlCreateTodo(todoData) {
         this.todoLogic.createTodo(todoData);
+        this.controlTodosDisplay();
+    }
+
+    controlUpdateTodo(todoId, todoData) {
+        this.todoLogic.updateTodo(todoId, todoData);
+        this.controlTodosDisplay();
+    }
+
+    controlCreateProject(projectTitle) {
+        this.projectLogic.createProject(projectTitle);
+        this.controlProjectDisplay();
+    }
+
+    controlGetTodoById(todoId) {
+        return this.todoLogic.getTodoById(todoId);
+    }
+
+    controlToggleFinished(todoId) {
+        this.todoLogic.todoItemToggleFinished(todoId);
+        this.controlTodosDisplay();
+    }
+
+    controlDeleteTodo(todoId) {
+        this.todoLogic.deleteTodo(todoId);
         this.controlTodosDisplay();
     }
 }

@@ -1,3 +1,5 @@
+import { format } from "date-fns";
+
 export default class TodoView {
     constructor() {
         this.mainContainer = document.querySelector(".main-container");
@@ -14,6 +16,7 @@ export default class TodoView {
         this.detailFormToHide = document.querySelector("#new-todo-form-to-hide");
         this.projectFormToHide = document.querySelector("#project-form-to-hide-id");
         this.todoConfirmButton = document.querySelector("#todo-confirm-button");
+        this.todoUpdateButton = document.querySelector("#todo-update-button");
         this.projectConfirmButton = document.querySelector("#project-confirm-button");
 
         this.initEventListeners();
@@ -42,17 +45,45 @@ export default class TodoView {
         })
 
         this.todoConfirmButton.addEventListener("click", (e) => {
+            e.preventDefault();
             this.handleSubmitTodo();
         })
 
         this.projectConfirmButton.addEventListener("click", (e) => {
+            e.preventDefault();
             this.handleSubmitProject();
         })
 
-        this.
+        this.todoUpdateButton.addEventListener("click", (e) => {
+            e.preventDefault();
+            this.handleUpdateTodo();
+        })
+
+        this.todoList.addEventListener("click", (e) => {
+            const clickedItem = e.target.closest(".todo-item");
+        
+            if (clickedItem) {
+                const deleteButton = e.target.closest(".delete-button");
+                // Handle edit todo
+                if (!e.target.classList.contains("checkbox") && !e.target.classList.contains("delete-button")) {
+                    this.handleEditTodo(clickedItem);
+                }
+        
+                // Handle checkbox toggle
+                if (e.target.classList.contains("checkbox")) {
+                    this.handleCheckbox(e.target);
+                }
+        
+                // Handle delete button
+                if (deleteButton) {
+                    this.handleDeleteTodo(deleteButton);
+                }
+            }
+        });
     }
 
     handleTimeFilterClick(target) {
+        this.hideFormDivs();
         this.clearNavItemSelector();
         this.showNavItemSelector(target);
 
@@ -60,6 +91,7 @@ export default class TodoView {
     }
 
     handleProjectClickFilter(target) {
+        this.hideFormDivs();
         this.clearNavItemSelector();
         this.showNavItemSelector(target);
 
@@ -69,37 +101,92 @@ export default class TodoView {
     }
 
     handleAddTodoButton() {
-        const formTodoProjectDropdown = document.querySelector("#form-project");
-        
         this.hideFormDivs();
+        document.querySelector("#todo-form").reset();
+
+
+        const detailFormHeader = document.querySelector("#todo-detail-title");
+        detailFormHeader.textContent = "Create New Todo";
 
         // Display available projects in dropdown
-        const myProjects = this.controller.controlGetProjects();
-        myProjects.forEach((project) => {
-            const selectOption = document.createElement("option");
-            selectOption.setAttribute("value", project);
-            selectOption.textContent = project;
-            formTodoProjectDropdown.appendChild(selectOption);
-        })
+        this.displayAvailableProjects();
+
+        this.todoConfirmButton.hidden = false;
+        this.todoUpdateButton.hidden = true;
 
         this.detailFormToHide.hidden = false;
     }
 
     handleAddProjectButton() {
         this.hideFormDivs();
+        document.querySelector("#project-form").reset();
         this.projectFormToHide.hidden = false;
     }
 
     handleSubmitTodo() {
         const todoForm = document.querySelector("#todo-form")
+
+        const todoData = this.getTodoFormInputs();
+        this.controller.controlCreateTodo(todoData);
+
+        this.hideFormDivs();
+        todoForm.reset();
+    }
+
+    handleUpdateTodo() {
+        const todoForm = document.querySelector("#todo-form");
+        const selectedTodoItem = document.querySelector(".todo-item-selected");
+        console.log({selectedTodoItem})
+
+        const todoId = selectedTodoItem.getAttribute("data-id");
+
+        const todoData = this.getTodoFormInputs();
+        this.controller.controlUpdateTodo(todoId, todoData);
+
+        this.hideFormDivs();
+        todoForm.reset();
+    }
+
+    handleSubmitProject() {
+        const projectForm = document.querySelector("#project-form");
+        const projectTitle = document.querySelector("#project-title");
+
+        this.controller.controlCreateProject(projectTitle.value);
+
+        this.hideFormDivs();
+        projectForm.reset();
+    }
+
+    handleEditTodo(target) {
+        this.hideFormDivs();
+
+        // Remove todo highlights
+        const todos = document.querySelectorAll(".todo-item");
+        todos.forEach((todo) => {
+            todo.classList.remove("todo-item-selected");
+        })
+        target.classList.add("todo-item-selected");
+
+
+        const todoId = target.getAttribute("data-id");
+        const todoData = this.getSelectedTodoData(todoId);
+        this.populateSelectedTodoInputs(todoData);
+
+        const detailFormHeader = document.querySelector("#todo-detail-title");
+        detailFormHeader.textContent = "Update Todo";
+        
+        this.todoConfirmButton.hidden = true;
+        this.todoUpdateButton.hidden = false;
+
+        this.detailFormToHide.hidden = false;
+    }
+
+    getTodoFormInputs(){
         const formTodoTitle = document.querySelector("#form-title");
         const formTodoDescription = document.querySelector("#form-description");
         const formTodoDate = document.querySelector("#input-date");
         const formTodoPriority = document.querySelector("#form-priority");
-        const formTodoProject = document.querySelector("#form-project");
-        
-        const availableProjects = this.controller.controlGetProjects();
-        this.hideFormDivs(); 
+        const formTodoProject = document.querySelector("#form-project"); 
 
         const todoData = {
             title: formTodoTitle.value,
@@ -109,12 +196,54 @@ export default class TodoView {
             project: formTodoProject.value
         }
 
-        this.controller.controlCreateTodo(todoData);
-
-        todoForm.reset();
+        return todoData;
     }
 
-    handleSubmitProject() {
+    getSelectedTodoData(todoId) {
+        return this.controller.controlGetTodoById(todoId);
+    }
+
+    // Display available projects in dropdown
+    displayAvailableProjects() {
+        // Clear all projects from dropdown except "None"
+        const formTodoProjectDropdown = document.querySelector("#form-project");
+        while (formTodoProjectDropdown.children[1]) {
+            formTodoProjectDropdown.removeChild(formTodoProjectDropdown.children[1]);
+        }
+
+        const myProjects = this.controller.controlGetProjects();
+        myProjects.forEach((project) => {
+            const selectOption = document.createElement("option");
+            selectOption.setAttribute("value", project);
+            selectOption.textContent = project;
+            formTodoProjectDropdown.appendChild(selectOption);
+        })
+    }
+    
+    populateSelectedTodoInputs(todoData) {
+        const formTodoTitle = document.querySelector("#form-title");
+        const formTodoDescription = document.querySelector("#form-description");
+        const formTodoDate = document.querySelector("#input-date");
+        const formTodoPriority = document.querySelector("#form-priority");
+        const formTodoProject = document.querySelector("#form-project"); 
+
+        this.displayAvailableProjects();
+
+        formTodoTitle.value = todoData.title;
+        formTodoDescription.value = todoData.description;
+        formTodoDate.value = format(todoData.dueDate, 'yyyy-MM-dd');
+        formTodoPriority.value = todoData.priority;
+        formTodoProject.value = todoData.project;
+    }
+
+    handleCheckbox(target) {
+        const todoId = target.parentElement.getAttribute("data-id");
+        this.controller.controlToggleFinished(todoId);
+    }
+
+    handleDeleteTodo(target) {
+        const todoId = target.parentElement.getAttribute("data-id");
+        this.controller.controlDeleteTodo(todoId);
         this.hideFormDivs();
     }
 
@@ -144,11 +273,17 @@ export default class TodoView {
             checkbox.setAttribute("type", "checkbox");
             checkbox.setAttribute("name", "finished");
             checkbox.setAttribute("id", "finished");
+            checkbox.classList.add("checkbox");
+            if (todo.finished) {
+                console.log({todo});
+                checkbox.checked = todo.finished;
+                todoItem.classList.add("todo-item-finished");
+            }
             todoItem.appendChild(checkbox);
 
             const itemDate = document.createElement("span");
             itemDate.classList.add("item-date");
-            itemDate.textContent = todo.dueDate || "No date";
+            itemDate.textContent = format(todo.dueDate, 'MMMM do') || "No date";
             todoItem.appendChild(itemDate);
 
             const itemTitle = document.createElement("span");

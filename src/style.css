@@ -5,6 +5,7 @@
     --header-color-focus:rgb(106, 150, 144);
     --header-color-shadow:rgba(88, 126, 121, 0.705);
     --sidebar-color:rgb(227, 247, 242);
+    --finished-color:rgba(227, 247, 242, 0.315);
     --nav-color-hover: rgb(192, 230, 223);
     --main-shadow:rgb(177, 177, 177);
     
@@ -23,7 +24,7 @@ body {
 
 .content {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 200px 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-template-rows: 1fr 10fr;
     height: 100vh;
     width: 100vw;
@@ -48,16 +49,21 @@ body {
     grid-column: 1 / 2;
     grid-row: 2 / 3;
     background-color: var(--sidebar-color);
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
 
 .navbar {
     padding: 12px 30px 15px 20px;
+    width: 100%;
 }
 
 .navbar-list {
     list-style-type: none;
     padding: 0;
     margin: 0px;
+    width: 100%;
 }
 
 .nav-item-header {
@@ -73,6 +79,11 @@ body {
     margin-left: 12px;
     padding-top: 5px;
     cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    display: block;
 }
 
 .nav-item:hover,
@@ -140,8 +151,15 @@ body {
     position: relative;
 }
 
+.todo-item-finished {
+    background-color: var(--finished-color);
+}
+
 .todo-item.todo-item-selected {
     box-shadow: 2px 2px 3px var(--main-shadow);
+    border-top: 1px solid var(--header-color-focus);
+    border-right: 1px solid var(--header-color-focus);
+    border-bottom: 1px solid var(--header-color-focus);
 }
 
 .todo-item.todo-item-selected::after {
@@ -171,14 +189,15 @@ body {
 }
 
 .todo-item>.item-date {
-    width: max-content;
-    padding-right: 8px;
-    border-right: 2px solid var(--header-color-focus);
+    width: 89px;
+    /* padding-right: 8px; */
+    
 }
 
 .item-title {
-    margin-left: 7px;
+    margin-left: 5px;
     margin-right: 10px;
+    padding-left: 10px;
     font-size: 1.2rem;
     flex-grow: 1;
     white-space: nowrap;
@@ -186,6 +205,7 @@ body {
     text-overflow: ellipsis;
     min-width: 150px;
     max-width: 100%;
+    border-left: 2px solid var(--header-color-focus);
 }
 
 .priority {
@@ -281,8 +301,12 @@ body {
     background-color: white;
 }
 
-.detail-form textarea {
+.detail-form #form-description {
     resize: vertical;
+}
+
+#project-title {
+    resize: none;
 }
 
 .detail-form input[type=date] {
@@ -290,8 +314,7 @@ body {
 }
 
 .detail-form select {
-    min-width: 200px;
-    max-width: max-content;
+    width: 200px;
 }
 
 .select-div label {

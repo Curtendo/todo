@@ -29,7 +29,7 @@
         <div class="main-container">
             <ul class="todo-item-list">
                 <li class="todo-item todo-item-selected">
-                    <input type="checkbox" name="finished" id="finished">
+                    <input type="checkbox" name="finished" class="checkbox" id="finished">
                     <span class="item-date">8/12</span>
                     <span class="item-title">Todo 1 asdf msalfjl w sdasdfasdfasdfsfnw sfk salkasdfkjhasdfklasffj wle skfj w jsldkf</span>
                     <span class="priority priority-high">HIGH</span>
@@ -48,7 +48,7 @@
         </div>
         <div class="detail-container">
             <div class="detail-form-to-hide" id="new-todo-form-to-hide" hidden>
-                <h2 class="detail-title">Create new todo</h2>
+                <h2 class="detail-title" id="todo-detail-title">Create new todo</h2>
                 <div class="detail-form-container">
                     <form action="" class="detail-form" id="todo-form">
                         <input type="text" name="form-title" id="form-title" placeholder="Title" required>
@@ -73,6 +73,7 @@
                             <label for="form-project">Project</label>
                         </div>
                         <button type="submit" id="todo-confirm-button">Confirm</button>
+                        <button type="submit" id="todo-update-button" hidden>Update</button>
                     </form>
                 </div>
             </div>
@@ -80,7 +81,7 @@
                 <h2 class="detail-title">Create new project</h2>
                 <div class="detail-form-container">
                     <form action="" class="detail-form" id="project-form">
-                        <textarea name="project-title" id="project-title" rows="2" placeholder="Project Title" required></textarea>
+                        <textarea name="project-title" id="project-title" rows="2" resize="none" placeholder="Project Title" required></textarea>
                         <button type="submit" id="project-confirm-button">Confirm</button>
                     </form>
                 </div>
