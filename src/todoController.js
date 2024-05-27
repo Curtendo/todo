@@ -1,5 +1,4 @@
 import { makeFutureDate, makeNewDate } from "./utility";
-import { addDays } from "date-fns";
 
 export default class TodoController {
     constructor(todoLogic, projectLogic, view) {
