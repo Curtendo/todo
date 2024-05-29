@@ -1,4 +1,5 @@
-import { format } from "date-fns";
+import { format, isToday } from "date-fns";
+import { isWithinOneWeek, makeFutureDate } from "./utility";
 
 export default class TodoView {
     constructor() {
@@ -26,7 +27,6 @@ export default class TodoView {
         this.navbarListTimeFilters.addEventListener("click", (e) => {
             if (e.target.classList.contains("nav-item")) {
                 this.handleTimeFilterClick(e.target);
-                console.log(e.target);
             }
         })
 
@@ -87,7 +87,29 @@ export default class TodoView {
         this.clearNavItemSelector();
         this.showNavItemSelector(target);
 
-        // Filter by time code
+        // Filter by time
+        const navSelection = target.textContent;
+        const myTodos = this.controller.controlGetTodos();
+        switch(navSelection) {
+            case "All":
+                this.displayTodoItems(myTodos);
+                break;
+
+            case "Today":
+                const todaysTodos = myTodos.filter(todo => isToday(todo.dueDate));
+                this.displayTodoItems(todaysTodos);
+                break;
+
+            case "Week":
+                const currentDate = new Date();
+                const oneWeekLater = makeFutureDate(7);
+                const weeksTodos = myTodos.filter(todo => {
+                    return isWithinOneWeek(currentDate, oneWeekLater, todo.dueDate)
+                })
+
+                this.displayTodoItems(weeksTodos);
+                break;
+        }
     }
 
     handleProjectClickFilter(target) {
@@ -95,7 +117,7 @@ export default class TodoView {
         this.clearNavItemSelector();
         this.showNavItemSelector(target);
 
-        // Filter by project code
+        // Filter by project
         const projectTitle = target.textContent;
         this.controller.getFilteredProjects(projectTitle);
     }

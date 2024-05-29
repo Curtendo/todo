@@ -85,7 +85,6 @@ export default class TodoController {
 
     controlTodosDisplay() {
         const myTodos = this.todoLogic.getTodos();
-        console.log(myTodos);
         this.view.displayTodoItems(myTodos);
     }
 
@@ -98,6 +97,10 @@ export default class TodoController {
         const myTodos = this.todoLogic.getTodos();
         const filteredTodos = myTodos.filter(todo => todo.project === projectTitle);
         this.view.displayTodoItems(filteredTodos);
+    }
+
+    controlGetTodos() {
+        return this.todoLogic.getTodos();
     }
 
     controlGetProjects() {

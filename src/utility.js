@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import { addDays, isToday, isWithinInterval, parse, startOfDay } from 'date-fns';
+import { addDays, isWithinInterval, parse, startOfDay } from 'date-fns';
 
 export function generateUniqueId() {
     return uuidv4();
@@ -20,15 +20,9 @@ export function makeFutureDate(daysToAdd) {
     return futureDate;
 }
 
-export function isWithinOneWeek(dueDate) {
-    const currentDate = makeNewDate();
-    const oneWeekLater = makeFutureDate(7);
+export function isWithinOneWeek(currentDate, oneWeekLater, dueDate) {
     return isWithinInterval(dueDate, {
-        currentDate,
-        oneWeekLater
+        start: currentDate,
+        end: oneWeekLater
     })
-}
-
-export function isWithinToday(dueDate) {
-    return isToday(dueDate);
 }
