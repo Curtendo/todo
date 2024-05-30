@@ -26,10 +26,18 @@ export default class TodoLogic {
         return this.myTodos;
     }
 
+    initSetTodos(initTodos) {
+        this.myTodos = initTodos;
+    }
+
     // create todo item
     createTodo(newTodoData) {  
         const newTodo = new TodoItem(newTodoData);
         this.myTodos.push(newTodo);
+
+        // Store todos with newly added todo
+        this.saveToLocal();
+
         return newTodo;
     }
 
@@ -39,6 +47,7 @@ export default class TodoLogic {
         if (index !== -1) {
             this.myTodos.splice(index, 1);
         }
+        this.saveToLocal();
     }
 
     // Get todo data by ID
@@ -59,6 +68,7 @@ export default class TodoLogic {
             todo.priority = todoData.priority;
             todo.project = todoData.project;
         }
+        this.saveToLocal();
     }
 
     // Toggle Finished
@@ -67,6 +77,12 @@ export default class TodoLogic {
         if (todo) {
             todo.toggleFinished();
         }
+        this.saveToLocal();
+    }
+
+    // Save myTodos to local storage
+    saveToLocal() {
+        localStorage.setItem("myTodos", JSON.stringify(this.myTodos));
     }
 }
 
