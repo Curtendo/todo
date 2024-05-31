@@ -6,9 +6,14 @@ export function generateUniqueId() {
 }
 
 export function makeNewDate(dateString) {
+    console.log({dateString});
     if (dateString) {
-        const parsedDate = parse(dateString, 'yyyy-MM-dd', new Date());
-        return startOfDay(parsedDate);
+        if (dateString.length == 10) {
+            const parsedDate = parse(dateString, 'yyyy-MM-dd', new Date());
+            return startOfDay(parsedDate);
+        } else {
+            return startOfDay(new Date(dateString));
+        }
     } else {
         return startOfDay(new Date());
     }
@@ -25,4 +30,8 @@ export function isWithinOneWeek(currentDate, oneWeekLater, dueDate) {
         start: currentDate,
         end: oneWeekLater
     })
+}
+
+export function isDate(dueDate) {
+    return dueDate instanceof Date && !isNaN(dueDate);
 }

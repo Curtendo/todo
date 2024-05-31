@@ -1,14 +1,14 @@
-import { generateUniqueId } from "./utility";
+import { generateUniqueId, isDate, makeNewDate } from "./utility";
 
 class TodoItem {
-    constructor({title, description, dueDate, priority, project}) {
+    constructor({title, description, dueDate, priority, project, id, finished}) {
         this.title = title;
         this.description = description;
-        this.dueDate = dueDate;
+        this.dueDate = isDate(dueDate) ? dueDate : makeNewDate(dueDate);
         this.priority = priority;
         this.project = project;
-        this.id = generateUniqueId();
-        this.finished = false;
+        this.id = id || generateUniqueId();
+        this.finished = finished || false;
     }
 
     toggleFinished() {
@@ -26,8 +26,8 @@ export default class TodoLogic {
         return this.myTodos;
     }
 
-    initSetTodos(initTodos) {
-        this.myTodos = initTodos;
+    clearTodos() {
+        this.myTodos = [];
     }
 
     // create todo item

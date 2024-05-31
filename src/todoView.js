@@ -10,9 +10,11 @@ export default class TodoView {
 
         this.navbarListTimeFilters = document.querySelector("#navbar-list-time-filters");
         this.navbarListProjects = document.querySelector("#navbar-list-projects");
+        this.navbarAllItem = document.querySelector("#nav-item-all");
 
         this.addTodoButton = document.querySelector("#add-todo-button");
         this.addProjectButton = document.querySelector("#add-project-button");
+        this.restoreDefaults = document.querySelector("#restore-defaults-button");
 
         this.detailFormToHide = document.querySelector("#new-todo-form-to-hide");
         this.projectFormToHide = document.querySelector("#project-form-to-hide-id");
@@ -59,6 +61,11 @@ export default class TodoView {
             this.handleUpdateTodo();
         })
 
+        this.restoreDefaults.addEventListener("click", (e) => {
+            e.preventDefault();
+            this.handleRestoreDefaults();
+        })
+
         this.todoList.addEventListener("click", (e) => {
             const clickedItem = e.target.closest(".todo-item");
         
@@ -80,6 +87,12 @@ export default class TodoView {
                 }
             }
         });
+    }
+
+    restoreDefaults() {
+        this.clearNavItemSelector();
+        this.navbarAllItem.classList.add("nav-item-selected");
+        this.hideFormDivs();
     }
 
     handleTimeFilterClick(target) {
@@ -158,7 +171,6 @@ export default class TodoView {
     handleUpdateTodo() {
         const todoForm = document.querySelector("#todo-form");
         const selectedTodoItem = document.querySelector(".todo-item-selected");
-        console.log({selectedTodoItem})
 
         const todoId = selectedTodoItem.getAttribute("data-id");
 
@@ -269,6 +281,10 @@ export default class TodoView {
         this.hideFormDivs();
     }
 
+    handleRestoreDefaults() {
+        this.controller.controlRestoreDefaults();
+    }
+
     clearNavItemSelector() {
         const navbarItems = document.querySelectorAll(".nav-item");
         navbarItems.forEach((item) => {
@@ -287,7 +303,16 @@ export default class TodoView {
 
     displayTodoItems(myTodos) {
         this.todoList.innerHTML = "";
-        myTodos.forEach((todo) => {
+
+        // Sort todos
+        myTodos.sort((todo1, todo2) => {
+            console.log(todo1, todo2);
+            const result = todo1.dueDate - todo2.dueDate;
+            console.log({result});
+            return result;
+        })
+
+        myTodos.map((todo) => {
             const todoItem = document.createElement("li");
             todoItem.classList.add("todo-item");
 

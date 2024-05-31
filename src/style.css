@@ -39,9 +39,28 @@ body {
     background-color: var(--header-color);
     padding: 4px 12px;
     font-size: 1.8rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center
+    ;
 }
 
+header button {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    background-color: var();
+    width: fit-content;
+    padding: 5px 15px;
+    border-radius: 5px;
+    border: none;
+    outline: var(--main-shadow) solid 1px;
+    box-shadow: 2px 2px 2px var(--header-color-shadow);
+    cursor: pointer;
+}
 
+header button:active {
+    box-shadow: inset 1px 1px 2px var(--header-color-shadow);
+}
 
     /* sidebar */
 
@@ -130,6 +149,8 @@ body {
     box-shadow: inset 1px 1px 3px var(--main-shadow);
     min-width: 447px;
     position: relative;
+    overflow-y: auto; 
+    max-height: 100%; 
 }
 
 .todo-item-list {

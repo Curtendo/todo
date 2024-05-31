@@ -10,85 +10,96 @@ export default class TodoController {
         this.view.controller = this;
     }
 
-    init() {        
-        if (!localStorage.myTodos) {
-            this.todoLogic.createTodo({
-                title: 'Morning Workout',
-                description: 'Complete a 30-minute cardio session.',
-                dueDate: makeNewDate(),
-                priority: 'HIGH',
-                project: 'Gym',
-            });
+    init() { 
+        // localStorage.clear();
         
-            this.todoLogic.createTodo({
-                title: 'Team Meeting',
-                description: 'Attend the weekly team meeting.',
-                dueDate: makeFutureDate(1),
-                priority: 'MEDIUM',
-                project: 'Work',
-            });
-        
-            this.todoLogic.createTodo({
-                title: 'Project Proposal',
-                description: 'Draft and submit the project proposal document.',
-                dueDate: makeFutureDate(9),
-                priority: 'HIGH',
-                project: 'Work',
-            });
-        
-            this.todoLogic.createTodo({
-                title: 'Grocery Shopping',
-                description: 'Buy groceries for the week.',
-                dueDate: makeFutureDate(3),
-                priority: 'LOW',
-                project: 'None',
-            });
-        
-            this.todoLogic.createTodo({
-                title: 'Math Homework',
-                description: 'Complete the math homework assignment.',
-                dueDate: makeFutureDate(20),
-                priority: 'HIGH',
-                project: 'School',
-            });
-        
-            this.todoLogic.createTodo({
-                title: 'Yoga Class',
-                description: 'Attend the evening yoga class.',
-                dueDate: makeFutureDate(5),
-                priority: 'MEDIUM',
-                project: 'Gym',
-            });
-        
-            this.todoLogic.createTodo({
-                title: 'Client Presentation',
-                description: 'Prepare slides and present to the client.',
-                dueDate: makeFutureDate(13),
-                priority: 'HIGH',
-                project: 'Work',
-            });
-        
-            this.todoLogic.createTodo({
-                title: 'History Essay',
-                description: 'Write and submit the history essay.',
-                dueDate: makeFutureDate(7),
-                priority: 'MEDIUM',
-                project: 'School',
-            });
-
-            this.todoLogic.saveToLocal();
-        }
-
-        // Get todos from local storage and copy to in-memory
-        const initTodos = JSON.parse(localStorage.getItem("myTodos"));
-        this.todoLogic.initSetTodos(initTodos);
+        // Load locally stored todos or if none, initialize defaults.
+        this.loadOrInitializeTodos();
 
         // Display todo list
         this.controlTodosDisplay();
 
         // Display available projects
         this.controlProjectDisplay();
-        
+    }
+
+    loadOrInitializeTodos() {
+        const storedTodos = localStorage.getItem('myTodos');
+        if (storedTodos) {
+            this.initSetTodos();
+        } else {
+            this.initializeDefaultTodos();
+        }
+    }
+
+    initializeDefaultTodos() {
+        const defaultTodos = [
+            {
+                title: 'Morning Workout',
+                description: 'Complete a 30-minute cardio session.',
+                dueDate: makeNewDate(),
+                priority: 'HIGH',
+                project: 'Gym',
+            },
+            {
+                title: 'Team Meeting',
+                description: 'Attend the weekly team meeting.',
+                dueDate: makeFutureDate(1),
+                priority: 'MEDIUM',
+                project: 'Work',
+            },
+            {
+                title: 'Project Proposal',
+                description: 'Draft and submit the project proposal document.',
+                dueDate: makeFutureDate(9),
+                priority: 'HIGH',
+                project: 'Work',
+            },
+            {
+                title: 'Grocery Shopping',
+                description: 'Buy groceries for the week.',
+                dueDate: makeFutureDate(3),
+                priority: 'LOW',
+                project: 'None',
+            },
+            {
+                title: 'Math Homework',
+                description: 'Complete the math homework assignment.',
+                dueDate: makeFutureDate(20),
+                priority: 'HIGH',
+                project: 'School',
+            },
+            {
+                title: 'Yoga Class',
+                description: 'Attend the evening yoga class.',
+                dueDate: makeFutureDate(5),
+                priority: 'MEDIUM',
+                project: 'Gym',
+            },
+            {
+                title: 'Client Presentation',
+                description: 'Prepare slides and present to the client.',
+                dueDate: makeFutureDate(13),
+                priority: 'HIGH',
+                project: 'Work',
+            },
+            {
+                title: 'History Essay',
+                description: 'Write and submit the history essay.',
+                dueDate: makeFutureDate(7),
+                priority: 'MEDIUM',
+                project: 'School',
+            }
+        ]
+        defaultTodos.forEach(todo => this.todoLogic.createTodo(todo));
+    }
+
+    initSetTodos() {
+        // Get local storage todos
+        const initTodos = JSON.parse(localStorage.getItem("myTodos"));
+
+        // Create new todoItem objects to get methods back
+        initTodos.forEach(todo => this.todoLogic.createTodo(todo));
     }
 
     controlTodosDisplay() {
@@ -142,5 +153,12 @@ export default class TodoController {
     controlDeleteTodo(todoId) {
         this.todoLogic.deleteTodo(todoId);
         this.controlTodosDisplay();
+    }
+
+    controlRestoreDefaults() {
+        localStorage.clear();
+        this.todoLogic.clearTodos();
+        this.init();
+        this.view.restoreDefaults();
     }
 }
