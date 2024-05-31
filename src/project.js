@@ -7,6 +7,10 @@ export default class ProjectLogic {
         return this.myProjects;
     }
 
+    clearProjects() {
+        this.myProjects = ["Work", "School", "Gym"];
+    }
+
     createProject(title) {
         if (!this.myProjects.includes(title)) {
             this.myProjects.push(title);

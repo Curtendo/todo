@@ -158,7 +158,7 @@ export default class TodoController {
     controlRestoreDefaults() {
         localStorage.clear();
         this.todoLogic.clearTodos();
+        this.projectLogic.clearProjects();
         this.init();
-        this.view.restoreDefaults();
     }
 }

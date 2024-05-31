@@ -64,7 +64,7 @@ export default class TodoLogic {
         if (todo) {
             todo.title = todoData.title;
             todo.description = todoData.description;
-            todo.dueDate = todoData.dueDate;
+            todo.dueDate = makeNewDate(todoData.dueDate);
             todo.priority = todoData.priority;
             todo.project = todoData.project;
         }

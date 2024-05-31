@@ -16,6 +16,9 @@ export default class TodoView {
         this.addProjectButton = document.querySelector("#add-project-button");
         this.restoreDefaults = document.querySelector("#restore-defaults-button");
 
+        this.todoForm = document.querySelector("#todo-form");
+        this.projectForm = document.querySelector("#project-form");
+
         this.detailFormToHide = document.querySelector("#new-todo-form-to-hide");
         this.projectFormToHide = document.querySelector("#project-form-to-hide-id");
         this.todoConfirmButton = document.querySelector("#todo-confirm-button");
@@ -46,23 +49,22 @@ export default class TodoView {
             this.handleAddProjectButton();
         })
 
-        this.todoConfirmButton.addEventListener("click", (e) => {
+        this.todoForm.addEventListener("submit", (e) => {
             e.preventDefault();
-            this.handleSubmitTodo();
+            const submitter = e.submitter;
+            if (submitter.id === "todo-confirm-button") {
+                this.handleSubmitTodo();
+            } else if (submitter.id === "todo-update-button") {
+                this.handleUpdateTodo();
+            }
         })
 
-        this.projectConfirmButton.addEventListener("click", (e) => {
+        this.projectForm.addEventListener("submit", (e) => {
             e.preventDefault();
             this.handleSubmitProject();
         })
 
-        this.todoUpdateButton.addEventListener("click", (e) => {
-            e.preventDefault();
-            this.handleUpdateTodo();
-        })
-
         this.restoreDefaults.addEventListener("click", (e) => {
-            e.preventDefault();
             this.handleRestoreDefaults();
         })
 
@@ -87,12 +89,6 @@ export default class TodoView {
                 }
             }
         });
-    }
-
-    restoreDefaults() {
-        this.clearNavItemSelector();
-        this.navbarAllItem.classList.add("nav-item-selected");
-        this.hideFormDivs();
     }
 
     handleTimeFilterClick(target) {
@@ -173,7 +169,6 @@ export default class TodoView {
         const selectedTodoItem = document.querySelector(".todo-item-selected");
 
         const todoId = selectedTodoItem.getAttribute("data-id");
-
         const todoData = this.getTodoFormInputs();
         this.controller.controlUpdateTodo(todoId, todoData);
 
@@ -264,8 +259,13 @@ export default class TodoView {
         this.displayAvailableProjects();
 
         formTodoTitle.value = todoData.title;
+
+
         formTodoDescription.value = todoData.description;
+
         formTodoDate.value = format(todoData.dueDate, 'yyyy-MM-dd');
+
+
         formTodoPriority.value = todoData.priority;
         formTodoProject.value = todoData.project;
     }
@@ -278,11 +278,17 @@ export default class TodoView {
     handleDeleteTodo(target) {
         const todoId = target.parentElement.getAttribute("data-id");
         this.controller.controlDeleteTodo(todoId);
+
         this.hideFormDivs();
+        this.clearNavItemSelector();
+        this.showNavItemSelector(this.navbarAllItem);
     }
 
     handleRestoreDefaults() {
         this.controller.controlRestoreDefaults();
+        this.clearNavItemSelector();
+        this.showNavItemSelector(this.navbarAllItem);
+        this.hideFormDivs();
     }
 
     clearNavItemSelector() {
@@ -304,13 +310,11 @@ export default class TodoView {
     displayTodoItems(myTodos) {
         this.todoList.innerHTML = "";
 
+        console.log(myTodos);
         // Sort todos
-        myTodos.sort((todo1, todo2) => {
-            console.log(todo1, todo2);
-            const result = todo1.dueDate - todo2.dueDate;
-            console.log({result});
-            return result;
-        })
+        myTodos.sort((todo1, todo2) => todo1.dueDate - todo2.dueDate);
+
+        console.log(myTodos);
 
         myTodos.map((todo) => {
             const todoItem = document.createElement("li");
@@ -340,7 +344,7 @@ export default class TodoView {
 
             const itemPriority = document.createElement("span");
             itemPriority.classList.add("priority");
-            itemPriority.textContent = todo.priority || "none";
+            itemPriority.textContent = todo.priority === "NONE" ? "" : todo.priority;
             switch(todo.priority) {
                 case "HIGH":
                     itemPriority.classList.add("priority-high");
@@ -384,6 +388,4 @@ export default class TodoView {
             this.navbarListProjects.appendChild(projectNavItem);
         })
     }
-
-    
 }

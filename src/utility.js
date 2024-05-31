@@ -6,12 +6,11 @@ export function generateUniqueId() {
 }
 
 export function makeNewDate(dateString) {
-    console.log({dateString});
     if (dateString) {
-        if (dateString.length == 10) {
+        if (dateString.length == 10) {  // Date from calendar input
             const parsedDate = parse(dateString, 'yyyy-MM-dd', new Date());
             return startOfDay(parsedDate);
-        } else {
+        } else {  // Date from Date() object
             return startOfDay(new Date(dateString));
         }
     } else {
